@@ -4,6 +4,7 @@ board = [ "1", "2", "3",
           "4", "5", "6",
           "7", "8", "9"]   
 
+game_active = True
 # build grid
 ''' example grid
 X | X | X
@@ -70,19 +71,64 @@ class GameBoard:
             self.winner = self.board[2]
             return True
 
-    
+class DefinePlayers:
+    def __init__(self, name, coin):
+        self.name = name
+        self.coin = coin
 
-# define player X, ask name
+    def __str__(self):
+        print(f'Player {self.name}, chose {self.coin}')
 
-# define player O, ask name
 
-# coin toss (random) which player starts
+def coin_toss():
+    coin_toss_round = random()
+    if coin_toss_round == 0:
+        return "heads"
+    elif coin_toss_round == 1:
+        return "tails" 
 
 # start game
+while (game_active):
+    print('Player 1 please enter your name: ')
+    name1 = input()
+    print('Player 1, do you want heads or tails? ')
+    coin1 = input()
+
+    print('Player 2 please enter your name: ')
+    name2 = input()
+
+    player1 = DefinePlayers(name1, coin1)
+    if player1.coin == 'heads':
+        coin2 = 'tails'
+    else:
+        coin2 = 'heads'
+    player2 = DefinePlayers(name2, coin2)
+
+    # coin toss (random) which player starts
+    if coin_toss() == player1.coin():
+        print(f'{player1.name} starts the game')
+        start1 = True
+    else:
+        print(f'{player2.name} starts the game')
+        start1 = False
+
+    if start1:
+        # first player, ask place in grid
+        print(f'{player1.name} - provide the spot you want to mark: ')
+        coordX = int(input())
+        # check if input is valid
+        while (coordX < 1 or coordX > 9):
+            print(f'{coordX} is invalid, choose a number from 1 to 9 : ')
+            coordX = int(input())
 
 
 
-# second player, ask place in grid to place
+
+
+
+
+
+
 
 # repeat until winner (3 in a row) or no more moves (read: grid full)
 
@@ -91,13 +137,6 @@ class GameBoard:
 # play again?
 
 
-# first player, ask place in grid
-print('Player X - provide the spot you want to mark: ')
-coordX = int(input())
-# check if input is valid
-while (coordX < 1 or coordX > 9):
-    print(f'{coordX} is invalid, choose a number from 1 to 9 : ')
-    coordX = int(input())
 #print('Player Y - provide the spot you want to mark: ')
 #coordY= input()
 
