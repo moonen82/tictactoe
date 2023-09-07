@@ -5,6 +5,7 @@ board = [ "1", "2", "3",
           "7", "8", "9"]   
 
 game_active = True
+switch_token = True
 # build grid
 ''' example grid
 X | X | X
@@ -30,11 +31,23 @@ class GameBoard:
         print(f' {self.board[6]} | {self.board[7]} | {self.board[8]}')
     
     # write spot chose by Player
-    def write_board(self, spot):
+    def write_board(self, spot, marker):
         self.spot = spot
+        self.marker = marker
         # if check which player's turn (if X) (elif O)
-        self.board[self.spot] = 'X'
-        # self.board[self.spot] = 'O'
+        if self.marker == 'X' or 'x':
+            self.board[self.spot] = 'X'
+        elif self.marker == 'O' or 'o':
+            self.board[self.spot] = 'O'
+        else:
+            print('Invalid marker')
+
+    def check_free_spot(self, spot):
+        self.spot = spot
+        if  self.spot != ' ':
+            return False
+        else:
+            return True
 
     # clear grid    
     def restart_board(self):
@@ -71,80 +84,108 @@ class GameBoard:
             self.winner = self.board[2]
             return True
 
+    def checkTie(self):
+        if " " not in self.board:
+            print("It's a tie")
+            game_active = False
+
+    def checkWin(self):
+        if check_row_win(self.board):
+            print(f'The winner is {self.winner}')
+            game_active = False
+
+        elif check_col_win(self.board):
+            print(f'The winner is {self.winner}')
+            game_active = False
+
+        elif check_diag_win(self.board):
+            print(f'The winner is {self.winner}')
+            game_active = False
+
 class DefinePlayers:
     def __init__(self, name, coin):
         self.name = name
         self.coin = coin
 
     def __str__(self):
-        print(f'Player {self.name}, chose {self.coin}')
+        return (f'Player {self.name}, chose {self.coin}')
 
 
 def coin_toss():
-    coin_toss_round = random()
+    coin_toss_round = random.random()
     if coin_toss_round == 0:
         return "heads"
     elif coin_toss_round == 1:
         return "tails" 
+
 
 # start game
 while (game_active):
     print('Player 1 please enter your name: ')
     name1 = input()
     print('Player 1, do you want heads or tails? ')
-    coin1 = input()
-
+    coin1 = input()    
     print('Player 2 please enter your name: ')
     name2 = input()
 
     player1 = DefinePlayers(name1, coin1)
+    print(player1)
     if player1.coin == 'heads':
         coin2 = 'tails'
     else:
         coin2 = 'heads'
     player2 = DefinePlayers(name2, coin2)
-
+    print(coin_toss())
     # coin toss (random) which player starts
     if coin_toss() == player1.coin():
         print(f'{player1.name} starts the game')
-        start1 = True
+        switch_token = True
     else:
         print(f'{player2.name} starts the game')
-        start1 = False
+        switch_token = False
 
-    if start1:
+    game_start = GameBoard(board)
+
+    while switch_token:        
+        game_start.print_board()
         # first player, ask place in grid
         print(f'{player1.name} - provide the spot you want to mark: ')
         coordX = int(input())
         # check if input is valid
-        while (coordX < 1 or coordX > 9):
-            print(f'{coordX} is invalid, choose a number from 1 to 9 : ')
+        while (coordX < 1 or coordX > 9) and game_start.check_free_spot(coordX):
+            print(f'{coordX} is invalid or already taken, choose a number from 1 to 9 : ')
             coordX = int(input())
+        game_start.write_board(coordX, 'X')
+        game_start.print_board()
+        game_start.winner()
+        game_start.checkTie()
+        switch_token = False
+    while not switch_token:
+        game_start.print_board()
+        print(f'{player2.name} - provide the spot you want to mark: ')
+        coordY = int(input())
+        # check if input is valid
+        while (coordY < 1 or coordY > 9) and game_start.check_free_spot(coordY) :
+            print(f'{coordY} is invalid or already taken, choose a number from 1 to 9 : ')
+            coordX = int(input())
+        game_start.write_board(coordY, 'O')
+        game_start.print_board()
+        game_start.winner()
+        game_start.checkTie()
+        switch_token = True
 
-
-
-
-
-
-
-
-
-
-# repeat until winner (3 in a row) or no more moves (read: grid full)
-
-# determine win/loss/draw
+        
 
 # play again?
 
 
-#print('Player Y - provide the spot you want to mark: ')
-#coordY= input()
+
 
 # TEST GRID INPUT
-game_board1 = GameBoard(board)
+#game_board1 = GameBoard(board)
 
 
-game_board1.write_board(coordX-1)
-game_board1.print_board()
+#game_board1.write_board(coordX-1)
+#game_board1.print_board()
 #game_board1.restart_board()
 #game_board1.print_board()
