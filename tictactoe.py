@@ -195,17 +195,3 @@ while (game_active):
             game_start.restart_board()
         elif choice1 == 'n':
             game_active = False
-
-# play again?
-
-
-
-
-# TEST GRID INPUT
-#game_board1 = GameBoard(board)
-
-
-#game_board1.write_board(coordX-1)
-#game_board1.print_board()
-#game_board1.restart_board()
-#game_board1.print_board()
